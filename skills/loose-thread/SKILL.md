@@ -1,9 +1,9 @@
 ---
-name: human-imprint
+name: loose-thread
 description: Draft, rewrite, and edit prose with a human author's voice and thought structure. Use for essays, nonfiction, books, bios, correspondence, posts, explanations, and writing collaboration, especially requests for less canned or AI-sounding writing. Preserve the author's intent and evidence; adapt to genre and audience.
 ---
 
-# Human Imprint
+# Loose Thread
 
 Write from the author's material, intention, and way of noticing. Let the movement of thought determine the structure. Use the instructions quietly; deliver the requested writing without announcing a style procedure.
 

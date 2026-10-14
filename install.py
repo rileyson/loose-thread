@@ -6,8 +6,10 @@ from pathlib import Path
 import shutil
 import time
 
-BEGIN = "<!-- human-imprint:begin -->"
-END = "<!-- human-imprint:end -->"
+BEGIN = "<!-- loose-thread:begin -->"
+END = "<!-- loose-thread:end -->"
+LEGACY_BEGIN = "<!-- human-imprint:begin -->"
+LEGACY_END = "<!-- human-imprint:end -->"
 MAX_FILES = 32
 MAX_BYTES = 512_000
 
@@ -41,7 +43,7 @@ def instruction_block(skill, profile):
         f"{BEGIN}\n"
         "## Writing together\n\n"
         f"For prose drafting, rewriting, editing, and sustained writing collaboration, "
-        f"read and apply the human-imprint skill at `{skill / 'SKILL.md'}` by default. "
+        f"read and apply the loose-thread skill at `{skill / 'SKILL.md'}` by default. "
         "Use available author samples and corrections, adapt to genre, and preserve "
         "the author's intent and factual material. Review structure and cadence as "
         "well as wording. For brief routine replies, use plain direct language "
@@ -52,11 +54,11 @@ def instruction_block(skill, profile):
 
 
 def install(args):
-    source = Path(__file__).resolve().parent / "skills" / "human-imprint"
+    source = Path(__file__).resolve().parent / "skills" / "loose-thread"
     files = inventory(source)
     if Path("SKILL.md") not in files:
         raise ValueError("Bundled SKILL.md is missing.")
-    target = args.skills_dir.expanduser().absolute() / "human-imprint"
+    target = args.skills_dir.expanduser().absolute() / "loose-thread"
     codex_home = args.codex_home.expanduser().absolute()
     profile = args.profile.expanduser().resolve() if args.profile else None
     if profile and not profile.is_file():
@@ -80,11 +82,16 @@ def install(args):
             raise ValueError("Global instructions exceed the installer byte limit.")
         text = previous.decode("utf-8")
         block = instruction_block(target, profile)
-        if BEGIN in text or END in text:
-            if text.count(BEGIN) != 1 or text.count(END) != 1:
+        begin, end = BEGIN, END
+        if LEGACY_BEGIN in text or LEGACY_END in text:
+            if BEGIN in text or END in text:
+                raise ValueError("Both old and new writing sections exist; no files changed.")
+            begin, end = LEGACY_BEGIN, LEGACY_END
+        if begin in text or end in text:
+            if text.count(begin) != 1 or text.count(end) != 1:
                 raise ValueError("Ambiguous existing writing section; no files changed.")
-            start = text.index(BEGIN)
-            finish = text.index(END) + len(END)
+            start = text.index(begin)
+            finish = text.index(end) + len(end)
             if finish < start:
                 raise ValueError("Malformed writing section; no files changed.")
             text = text[:start] + block + text[finish:]
@@ -99,7 +106,7 @@ def install(args):
         codex_home.mkdir(parents=True, exist_ok=True)
         if previous:
             digest = hashlib.sha256(previous).hexdigest()[:12]
-            backup = codex_home / f"AGENTS.md.human-imprint-backup-{digest}"
+            backup = codex_home / f"AGENTS.md.loose-thread-backup-{digest}"
             if not backup.exists():
                 with backup.open("xb") as stream:
                     stream.write(previous)

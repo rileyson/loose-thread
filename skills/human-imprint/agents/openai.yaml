@@ -1,6 +1,0 @@
-interface:
-  display_name: "Human Imprint"
-  short_description: "Preserve author voice and revise canned prose"
-  default_prompt: "Use $human-imprint to write or revise this in my voice, preserving my intent and factual material."
-policy:
-  allow_implicit_invocation: true

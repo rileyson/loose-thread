@@ -30,3 +30,7 @@ The final editorial clarifications were integrated after the completed follow-up
 ## Validation
 
 The skill validator and local-reference checks passed. Installation preserves existing global instructions, is idempotent, creates an exact backup, and refuses an unrelated existing skill or an active global override. The updated installation is checked against the source files, and the shareable ZIP excludes the private profile.
+
+## Naming
+
+The skill was renamed Loose Thread after these audits. The unedited reports retain its earlier name, Human Imprint.

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Loose Thread"
+  short_description: "Preserve author voice and revise canned prose"
+  default_prompt: "Use $loose-thread to write or revise this in my voice, preserving my intent and factual material."
+policy:
+  allow_implicit_invocation: true
